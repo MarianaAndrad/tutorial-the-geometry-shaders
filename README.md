@@ -53,13 +53,10 @@ python desafio.py
 
 ## Extra
 
-Numa outra pasta, **exploration**, há um script que gerará um arquivo de vídeo com a animação, com a utilização de um shader de geometria. Para executar o script, execute:
+Numa outra pasta, **exploration**, há um script que gerará um arquivo de vídeo com a animação, com a utilização de um shader de geometria, para a simulação de campo estrelar. Para executar o script, execute:
 
 ```bash
 python exploration.py
 ```
 
-
-
-Nota:
-> Este programa cria uma aplicação gráfica que utiliza shaders para realizar cálculos paralelizados (provavelmente para simular movimento ou outras interações) e os visualiza no  ecrã. Ele demonstra o uso de técnicas avançadas de computação gráfica, como shaders de cálculo e renderização com ping-pong entre buffers, em um contexto OpenGL dentro de uma aplicação Python usando a biblioteca arcade.
+> **Nota**: O script de exploração foi desenvolvido para fins de aprendizado e não faz parte do desafio proposto.

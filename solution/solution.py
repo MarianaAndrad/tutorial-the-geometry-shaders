@@ -141,22 +141,16 @@ class VCHelper:
             self.initShaders()
 
         if keys[pg.K_3]:
-            self.vertex_shader = open("shaders/vertex_shader_1.glsl", "r").read()
+            self.vertex_shader = open("shaders/vertex_shader_color.glsl", "r").read()
             self.fragment_shader = open("shaders/fragment_shader_color.glsl", "r").read()
             self.geometry_shader = open("shaders/geometry_shader_lines_and_colors.glsl", "r").read()
             self.initShaders()
 
         if keys[pg.K_4]:
-            self.vertex_shader = open("shaders/vertex_shader_1.glsl", "r").read()
+            self.vertex_shader = open("shaders/vertex_shader_color.glsl", "r").read()
             self.fragment_shader = open("shaders/fragment_shader_color.glsl", "r").read()
             self.geometry_shader = open("shaders/geometry_shader_circles.glsl", "r").read()
             self.initShaders()
-
-        # if keys[pg.K_4]:
-        #     self.vertex_shader = open("shaders/vertex_shader_1.glsl", "r").read()
-        #     self.fragment_shader = open("shaders/fragment_shader_color.glsl", "r").read()
-        #     self.geometry_shader = open("shaders/geometry_shader_4.glsl", "r").read()
-        #     self.initShaders()
 
 
 # initialize the helper class

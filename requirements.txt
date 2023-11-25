@@ -2,3 +2,4 @@ pyOpenGL
 pygame
 numpy==1.23.1
 glumpy
+arcade

@@ -8,45 +8,68 @@ SCR_WIDTH = 800
 SCR_HEIGHT = 600
 
 code_vertex_shader = """
-#version 150 core
-in vec2 pos;
-
-void main()
-{
-    gl_Position = vec4(pos, 0.0, 1.0);
-}
+    #version 150 core
+    
+    in vec2 pos;
+    in vec3 color;
+    in float sides;
+    
+    out vec3 vColor;
+    out float vSides;
+    
+    void main()
+    {
+        gl_Position = vec4(pos, 0.0, 1.0);
+        vColor = color;
+        vSides = sides;
+    }
 """
 
 code_fragment_shader = """
-#version 150 core
-out vec4 outColor;
-
-void main()
-{
-    outColor = vec4(1.0, 1.0, 1.0, 1.0);
-}
+    #version 150 core
+    
+    in vec3 fColor;
+    
+    out vec4 outColor;
+    
+    void main()
+    {
+        outColor = vec4(fColor, 1.0);
+    }
 """
 
 code_geometry_shader = """
-#version 150 core
+    #version 150 core
 
-layout(points) in;
-layout(line_strip, max_vertices = 2) out;
+    layout(points) in;
+    layout(line_strip, max_vertices = 64) out;
 
-void main()
-{
-    gl_Position = gl_in[0].gl_Position + vec4(-0.1, 0.0, 0.0, 0.0);
-    EmitVertex();
+    in vec3 vColor[];
+    in float vSides[];
+    out vec3 fColor;
 
-    gl_Position = gl_in[0].gl_Position + vec4(0.1, 0.0, 0.0, 0.0);
-    EmitVertex();
+    const float PI = 3.1415926;
 
-    EndPrimitive();
-}
+    void main()
+    {
+        fColor = vColor[0];
+
+        // Safe, GLfloats can represent small integers exactly
+        for (int i = 0; i <= vSides[0]; i++) {
+            // Angle between each side in radians
+            float ang = PI * 2.0 / vSides[0] * i;
+
+            // Offset from center of point (0.3 to accomodate for aspect ratio)
+            vec4 offset = vec4(cos(ang) * 0.3, -sin(ang) * 0.4, 0.0, 0.0);
+            gl_Position = gl_in[0].gl_Position + offset;
+
+            EmitVertex();
+        }
+
+        EndPrimitive();
+    }
 """
 
-
-# code_geometry_shader = open("shaders/geometry_shader_retr.glsl", "r").read()
 
 class VCHelper:
 
@@ -97,25 +120,27 @@ class VCHelper:
         # set up vertex data (and buffer(s)) and configure vertex attributes
         # ------------------------------------------------------------------
         self.points = array([
-            -0.5, 0.5, 1.0, 0.0, 0.0,  # top-left    (red)
-            0.5, 0.5, 0.0, 1.0, 0.0,  # top-right  (green)
-            0.5, -0.5, 0.0, 0.0, 1.0,  # bottom-right (blue)
-            -0.5, -0.5, 1.0, 1.0, 0.0,  # bottom-left (yellow)
+            # positions, colors, sides
+            -0.5, 0.5, 1.0, 0.0, 0.0, 4,  # top-left    (red)
+            0.5, 0.5, 0.0, 1.0, 0.0, 8,  # top-right  (green)
+            0.5, -0.5, 0.0, 0.0, 1.0, 16,  # bottom-right (blue)
+            -0.5, -0.5, 1.0, 1.0, 0.0, 32,  # bottom-left (yellow)
         ])
         self.vbo = glGenBuffers(1)
+
         glBindBuffer(GL_ARRAY_BUFFER, self.vbo)
         glBufferData(GL_ARRAY_BUFFER, (GLfloat * len(self.points))(*self.points), GL_STATIC_DRAW)
 
         # position attribute
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), None)
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), None)
         glEnableVertexAttribArray(0)
 
         # color attribute
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), ctypes.c_void_p(2 * sizeof(GLfloat)))
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), ctypes.c_void_p(2 * sizeof(GLfloat)))
         glEnableVertexAttribArray(1)
 
         # size attribute
-        glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), ctypes.c_void_p(4 * sizeof(GLfloat)))
+        glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), ctypes.c_void_p(5 * sizeof(GLfloat)))
         glEnableVertexAttribArray(2)
 
         glBindBuffer(GL_ARRAY_BUFFER, 0)

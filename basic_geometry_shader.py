@@ -23,7 +23,7 @@ out vec4 outColor;
 
 void main()
 {
-    outColor = vec4(1.0, 0.0, 0.0, 1.0);
+    outColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
 """
 
@@ -44,6 +44,8 @@ void main()
     EndPrimitive();
 }
 """
+
+# code_geometry_shader = open("shaders/geometry_shader_retr.glsl", "r").read()
 
 
 #
@@ -80,7 +82,10 @@ class VCHelper:
         fragmentShader = shaders.compileShader(self.fragment_shader, GL_FRAGMENT_SHADER)
         # geometry shader
         geometryShader = shaders.compileShader(self.geometry_shader, GL_GEOMETRY_SHADER)
+
         # link shaders
+        # self.shader = shaders.compileProgram(vertexShader, fragmentShader) # no geometry shader
+
         self.shader = shaders.compileProgram(vertexShader, fragmentShader, geometryShader)
         result = glGetProgramiv(self.shader, GL_LINK_STATUS)
 

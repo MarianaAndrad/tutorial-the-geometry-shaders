@@ -27,23 +27,9 @@ void main()
 }
 """
 
-code_geometry_shader = """
-#version 330 core
-layout (points) in;
-layout (triangle_strip, max_vertices = 3) out;
+# TODO: CHANGE THIS TO GEOMETRY TO SEE THE DIFFERENCE
+code_geometry_shader = open("shaders/geometry_shader_basic.glsl", "r").read()
 
-void main() {
-    for(int i = 0; i < 3; i++) {
-        gl_Position = gl_in[0].gl_Position + vec4(i == 0 ? -0.1 : 0.1, i == 2 ? -0.1 : 0.1, 0.0, 0.0);
-        EmitVertex();
-    }
-    EndPrimitive();
-}
-
-"""
-
-
-# code_geometry_shader = open("shaders/geometry_shader_retr.glsl", "r").read()
 
 class VCHelper:
 

@@ -95,15 +95,19 @@ class VCHelper:
         pg.display.set_caption("Visual Computing")
 
         # initialize OpenGL
-        glClearColor(0.0, 0.0, 0.2, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
 
     def render(self):
         """ This method contains the instructions for rendering the scene. """
         # render
         # ------
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
+
+        # set line width
+        glLineWidth(5.0)
+        glPointSize(5.0)
 
         # Render frame
         glUseProgram(self.shader)
@@ -131,13 +135,13 @@ class VCHelper:
         if keys[pg.K_1]:
             self.vertex_shader = open("shaders/vertex_shader.glsl", "r").read()
             self.fragment_shader = open("shaders/fragment_shader.glsl", "r").read()
-            self.geometry_shader = open("shaders/geometry_shader_lines.glsl", "r").read()
+            self.geometry_shader = open("shaders/geometry_shader_basic.glsl", "r").read()
             self.initShaders()
 
         if keys[pg.K_2]:
             self.vertex_shader = open("shaders/vertex_shader.glsl", "r").read()
             self.fragment_shader = open("shaders/fragment_shader.glsl", "r").read()
-            self.geometry_shader = open("shaders/geometry_shader_retangulos.glsl", "r").read()
+            self.geometry_shader = open("shaders/geometry_shader_linhas_paralelas.glsl", "r").read()
             self.initShaders()
 
         if keys[pg.K_3]:
@@ -149,9 +153,8 @@ class VCHelper:
         if keys[pg.K_4]:
             self.vertex_shader = open("shaders/vertex_shader_color.glsl", "r").read()
             self.fragment_shader = open("shaders/fragment_shader_color.glsl", "r").read()
-            self.geometry_shader = open("shaders/geometry_shader_circles.glsl", "r").read()
+            self.geometry_shader = open("shaders/geometry_shaders_estrelas.glsl", "r").read()
             self.initShaders()
-
 
 # initialize the helper class
 myWindow = VCHelper()

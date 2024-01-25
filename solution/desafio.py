@@ -48,25 +48,25 @@ code_geometry_shader = """
     in float vSides[];
     out vec3 fColor;
 
+    
     const float PI = 3.1415926;
+    const int numPoints = 10; // Número de pontas da estrela
+    const float outerRadius = 0.2; // Raio externo
+    const float innerRadius = 0.1; // Raio interno
+    
+    void main() {
+        fColor = vColor[0]; // Define a cor da estrela
+    
+        for (int i = 0; i <= vSides[0]; i++) { // Para cada ponta da estrela
+            float angle = float(i) * 2.0 * PI / float(vSides[0]); // Calcula o ângulo atual
+            float radius = i % 2 == 0 ? outerRadius : innerRadius;
 
-    void main()
-    {
-        fColor = vColor[0];
-
-        // Safe, GLfloats can represent small integers exactly
-        for (int i = 0; i <= vSides[0]; i++) {
-            // Angle between each side in radians
-            float ang = PI * 2.0 / vSides[0] * i;
-
-            // Offset from center of point (0.3 to accomodate for aspect ratio)
-            vec4 offset = vec4(cos(ang) * 0.3, -sin(ang) * 0.4, 0.0, 0.0);
+            vec4 offset = vec4(radius * cos(angle), radius * sin(angle), 0.0, 0.0);
             gl_Position = gl_in[0].gl_Position + offset;
-
             EmitVertex();
         }
-
-        EndPrimitive();
+    
+        EndPrimitive(); // Finaliza a primitiva atual
     }
 """
 
@@ -121,8 +121,8 @@ class VCHelper:
         # ------------------------------------------------------------------
         self.points = array([
             # positions, colors, sides
-            -0.5, 0.5, 1.0, 0.0, 0.0, 4,  # top-left    (red)
-            0.5, 0.5, 0.0, 1.0, 0.0, 8,  # top-right  (green)
+            -0.5, 0.5, 1.0, 0.0, 0.0, 8,  # top-left    (red)
+            0.5, 0.5, 0.0, 1.0, 0.0, 10,  # top-right  (green)
             0.5, -0.5, 0.0, 0.0, 1.0, 16,  # bottom-right (blue)
             -0.5, -0.5, 1.0, 1.0, 0.0, 32,  # bottom-left (yellow)
         ])
@@ -154,15 +154,18 @@ class VCHelper:
         pg.display.set_caption("Visual Computing")
 
         # initialize OpenGL
-        glClearColor(0.0, 0.0, 0.2, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
 
     def render(self):
         """ This method contains the instructions for rendering the scene. """
         # render
         # ------
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
+
+        # set line width
+        glLineWidth(5.0)
 
         # Render frame
         glUseProgram(self.shader)

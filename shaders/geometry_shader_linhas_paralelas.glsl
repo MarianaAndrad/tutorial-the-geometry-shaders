@@ -1,15 +1,8 @@
 #version 330 core
-
 layout(points) in;
 layout(line_strip, max_vertices = 4) out;
 
-in vec3 vColor[]; // Output from vertex shader for each vertex
-
-out vec3 fColor; // Output to fragment shader
-
-void main()
-{
-    fColor = vColor[0];
+void main() {
     // Define o deslocamento para as linhas paralelas
     float offset = 0.05;
 

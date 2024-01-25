@@ -23,30 +23,25 @@ out vec4 outColor;
 
 void main()
 {
-    outColor = vec4(1.0, 1.0, 1.0, 1.0);
+    outColor = vec4(0.0, 0.0, 0.2, 1.0);
 }
 """
 
 code_geometry_shader = """
-#version 150 core
-
+#version 330 core
 layout(points) in;
-layout(line_strip, max_vertices = 2) out;
-
+layout(triangle_strip, max_vertices = 3) out;
 void main()
 {
-    gl_Position = gl_in[0].gl_Position + vec4(-0.1, 0.0, 0.0, 0.0);
-    EmitVertex();
-
-    gl_Position = gl_in[0].gl_Position + vec4(0.1, 0.0, 0.0, 0.0);
-    EmitVertex();
-
+    for(int i = 0; i < 3; i++) {
+        gl_Position = gl_in[0].gl_Position + 
+            vec4(i == 0 ? -0.1 : 0.1, 
+            i == 2 ? -0.1 : 0.1, 0.0, 0.0);
+        EmitVertex();
+    }
     EndPrimitive();
 }
 """
-
-
-# code_geometry_shader = open("shaders/geometry_shader_retr.glsl", "r").read()
 
 class VCHelper:
 
@@ -128,16 +123,15 @@ class VCHelper:
         pg.display.set_mode(self.windowSize, pg.DOUBLEBUF | pg.OPENGL | pg.RESIZABLE)
         pg.display.set_caption("Visual Computing")
 
-        # initialize OpenGL
-        glClearColor(0.0, 0.0, 0.2, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
-
     def render(self):
         """ This method contains the instructions for rendering the scene. """
         # render
         # ------
-        glClearColor(0.0, 0.0, 0.0, 1.0)
+        glClearColor(1.0, 1.0, 1.0, 1.0)
         glClear(GL_COLOR_BUFFER_BIT)
+
+        # set line width
+        glLineWidth(5.0)
 
         # Render frame
         glUseProgram(self.shader)

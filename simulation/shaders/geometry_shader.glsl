@@ -1,7 +1,7 @@
 #version 330
 
 layout (points) in;
-layout (triangle_strip, max_vertices = 4) out;
+layout (triangle_strip, max_vertices = 6) out;
 
 // Use arcade's global projection UBO
 uniform Projection {

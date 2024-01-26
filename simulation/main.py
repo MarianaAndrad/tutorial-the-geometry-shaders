@@ -151,9 +151,9 @@ class MyWindow(arcade.Window):
             yield 0.0  # vw (padding)
 
             # Color
-            yield 1.0  # r
-            yield 1.0  # g
-            yield 1.0  # b
+            yield 3.0  # r
+            yield 4.0  # g
+            yield 0.0  # b
             yield 1.0  # a
 
 
